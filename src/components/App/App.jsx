@@ -6,7 +6,6 @@ import { getPictures } from 'pixaAPI';
 import { Component } from 'react';
 import { Container } from './App.styled';
 
-
 export default class App extends Component {
   state = {
     search: '',
@@ -26,11 +25,10 @@ export default class App extends Component {
     const nextPage = pageCount + 1;
     const response = await getPictures(search, nextPage);
     this.setState(prevState => ({
-      gallery: response.data.hits,
+      gallery: [...prevState.gallery, ...response.data.hits],
       pageCount: prevState.pageCount + 1,
     }));
   };
-
 
   async componentDidMount() {
     const { search, pageCount } = this.state;
@@ -40,31 +38,31 @@ export default class App extends Component {
     });
   }
   async componentDidUpdate(prevProps, prevState) {
-    const { search, pageCount} = this.state;
+    const { search, pageCount } = this.state;
     if (prevState.search !== search) {
       this.setState({
-        status: 'pending'
+        status: 'pending',
       });
       const response = await getPictures(search, pageCount);
       this.setState({
         gallery: response.data.hits,
         pageCount: 1,
-        status: 'resolved'
+        status: 'resolved',
       });
     }
   }
   render() {
-
     return (
       <Container>
-        
         <Searchbar onSubmit={this.handleSearch} />
-
-        {this.state.status === 'pending' ? <Loader />:
+        {this.state.status === 'pending' ? (
+          <Loader />
+        ) : (
           <ImageGallery gallery={this.state.gallery} />
-}
-        <Button onLoadMore={this.handleLoadMore} />
-        
+        )}
+        {this.state.gallery.length >= 12 && (
+          <Button onLoadMore={this.handleLoadMore} />
+        )}
       </Container>
     );
   }
