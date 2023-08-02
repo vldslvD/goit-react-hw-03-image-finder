@@ -1,6 +1,6 @@
 import axios from "axios";
 export async function getPictures(search, pageCount) {
-  const BASE_URL = 'https://pixabay.com/api/';
+  axios.defaults.baseURL = 'https://pixabay.com/api/';
     const options = {
     params: {
       key: '18437438-e84daa7a60435ecf6da817657',
@@ -11,7 +11,7 @@ export async function getPictures(search, pageCount) {
       page: pageCount,
     },
   };
-    const response = await axios.get(`${BASE_URL}?q=${search.replace(/ /g, '+')}`, options);
+    const response = await axios.get(`?q=${search.replace(/ /g, '+')}`, options);
     
   return response;
 }

@@ -1,5 +1,6 @@
 import { MdSearch } from "react-icons/md";
 import { Formik } from 'formik';
+import PropTypes from 'prop-types';
 import { Button, ButtonText, Header, SearchField, SearchForm } from './Searchbar.styled';
 const initValues = {
   search: '',
@@ -28,4 +29,8 @@ export const Searchbar = ({ onSubmit }) => {
       </Formik>
     </Header>
   );
+};
+
+Searchbar.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
 };

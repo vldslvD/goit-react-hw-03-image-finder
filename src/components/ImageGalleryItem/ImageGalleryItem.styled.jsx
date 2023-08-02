@@ -15,7 +15,7 @@ export const Image = styled.img`
   max-width: 100%;
   height: auto;
   width: 100%;
-  height: 260px;
+  height: 230px;
   object-fit: cover;
   
 
