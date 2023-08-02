@@ -16,11 +16,13 @@ export default class App extends Component {
     pageCount: 1,
     status: 'idle',
     error: null,
+    showMoreBtn: true,
   };
 
   async componentDidMount() {
     try {
       this.setState({
+        
           status: 'pending',
         });
       const { search, pageCount } = this.state;
@@ -38,15 +40,16 @@ export default class App extends Component {
   }
   async componentDidUpdate(prevProps, prevState) {
     try {
-      const { search, pageCount } = this.state;
+      const { search } = this.state;
       if (prevState.search !== search) {
         this.setState({
+          showMoreBtn: true,
           status: 'pending',
+          pageCount: 1,
         });
-        const response = await getPictures(search, pageCount);
+        const response = await getPictures(search, 1);
         this.setState({
           gallery: response.data.hits,
-          pageCount: 1,
           status: 'resolved',
         });
       }
@@ -68,6 +71,12 @@ export default class App extends Component {
       const { search, pageCount } = this.state;
       const nextPage = pageCount + 1;
       const response = await getPictures(search, nextPage);
+      if (response.data.hits.length < 12) {
+        this.renderInfo("There are no more pics");
+        this.setState({
+          showMoreBtn: false
+        })
+      }
       this.setState(prevState => ({
         gallery: [...prevState.gallery, ...response.data.hits],
         pageCount: prevState.pageCount + 1,
@@ -88,7 +97,7 @@ export default class App extends Component {
     toast.info(message);
   }
   render() {
-    const { search, status, error, gallery } = this.state;
+    const { search, status, error, gallery, showMoreBtn } = this.state;
     return (
       <Container>
         <Searchbar onSubmit={this.handleSearch} />
@@ -96,7 +105,7 @@ export default class App extends Component {
         {status === 'resolved' && <ImageGallery gallery={gallery} />}
         {status === 'resolved' && gallery.length === 0 && this.renderInfo(`There are no pictures for ${search}`)}
         {status === 'rejected' && this.renderError(error.message)}
-        {this.state.gallery.length >= 12 && (
+        {this.state.gallery.length >= 12 && showMoreBtn &&(
           <Button onLoadMore={this.handleLoadMore} />
         )}
         <ToastContainer/>
