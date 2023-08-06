@@ -6,7 +6,7 @@ export const Loader = () => {
       width="80"
       color="#0f3d82"
       ariaLabel="triangle-loading"
-      wrapperStyle={{}}
+      wrapperStyle={{margin: '0 auto'}}
       wrapperClassName=""
       visible={true}
     />

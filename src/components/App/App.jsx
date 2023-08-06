@@ -8,7 +8,6 @@ import { Container } from './App.styled';
 import { animateScroll as scroll } from 'react-scroll';
 import { ToastContainer, toast } from 'react-toastify';
   import 'react-toastify/dist/ReactToastify.css';
-
 export default class App extends Component {
   state = {
     search: '',
@@ -40,6 +39,7 @@ export default class App extends Component {
   }
   async componentDidUpdate(prevProps, prevState) {
     try {
+      
       const { search } = this.state;
       if (prevState.search !== search) {
         this.setState({
